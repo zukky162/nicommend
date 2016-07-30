@@ -1,4 +1,4 @@
 module.exports = (robot) ->
 
-  robot.hear /花火/i, (res) ->
-    res.send "隅田川"
+  robot.hear /(http:\/\/www.nicovideo.jp\/watch\/.+)(\s|$)/, (msg) ->
+    msg.send msg.match[1]

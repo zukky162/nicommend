@@ -8,8 +8,8 @@ config = {
 
 module.exports = function(robot) {
     
-    robot.hear(/http:\/\/www.nicovideo.jp\/watch\/(.+)(\s|$)/, function(msg) {
-	itemId = msg.match[1];
+    robot.respond(/http:\/\/(www\.nicovideo\.jp\/watch|nico\.ms)\/(\w+)[^\s\/]*(\s|$)/, function(msg) {
+	itemId = msg.match[2];
 	getSession(function(session) {
 	    getToken(session, function(token) {
 		addToMylist(session, token, itemId, function(body) {
@@ -18,7 +18,7 @@ module.exports = function(robot) {
 	    });
 	});
     });
-    
+
     robot.respond(/(list|リスト)/i, function(msg) {
 	msg.send('http://www.nicovideo.jp/mylist/' + config.mylistId);
     });
@@ -60,7 +60,7 @@ function getToken(session, callback) {
 	if (error) {
 	    throw error;
 	}
-	callback(body.match(/NicoAPI\.token = "([\d\w-]+)";/)[1]);
+	callback(body.match(/NicoAPI\.token = "([\w-]+)";/)[1]);
     });
 }
 

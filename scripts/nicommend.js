@@ -136,7 +136,7 @@ function popMylist(callback) {
 
 module.exports = function(robot) {
     
-    robot.respond(/(.*)http:\/\/(www\.nicovideo\.jp\/watch|nico\.ms)\/(\w+)[^\s\/]*\s*(.*)$/, function(msg) {
+    robot.hear(/(.*)http:\/\/(www\.nicovideo\.jp\/watch|nico\.ms)\/(\w+)[^\s\/]*\s*(.*)$/, function(msg) {
         var itemId = msg.match[3];
         var description = msg.match[1].length > 0 ? msg.match[1] : msg.match[4];
         console.log('item_id=' + itemId + ' description=' + description);

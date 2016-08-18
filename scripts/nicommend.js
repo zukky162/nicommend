@@ -79,12 +79,13 @@ function getWithSessionToken(options, callback) {
     });
 }
 
-function addToMylist(itemId, callback) {
+function addToMylist(itemId, description, callback) {
     var options = {
         url: 'http://www.nicovideo.jp/api/mylist/add',
         qs: {
-            group_id: config.mylistId,
-            item_id:  itemId
+            group_id:    config.mylistId,
+            item_id:     itemId,
+            description: description
         }
     };
     getWithSessionToken(options, callback);
@@ -135,9 +136,11 @@ function popMylist(callback) {
 
 module.exports = function(robot) {
     
-    robot.respond(/http:\/\/(www\.nicovideo\.jp\/watch|nico\.ms)\/(\w+)[^\s\/]*(\s|$)/, function(msg) {
-        var itemId = msg.match[2];
-        addToMylist(itemId, function(error, response, body) {
+    robot.respond(/(.*)http:\/\/(www\.nicovideo\.jp\/watch|nico\.ms)\/(\w+)[^\s\/]*\s*(.*)$/, function(msg) {
+        var itemId = msg.match[3];
+        var description = msg.match[1].length > 0 ? msg.match[1] : msg.match[4];
+        console.log('item_id=' + itemId + ' description=' + description);
+        addToMylist(itemId, description, function(error, response, body) {
             console.log(body);
             var obj = JSON.parse(body);
             if (obj.hasOwnProperty('error')) {

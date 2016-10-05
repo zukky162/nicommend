@@ -64,7 +64,8 @@ function getWithSessionToken(options, callback) {
     addSessionToken(options, session, token);
     request.get(options, function(error, response, body) {
         var obj = JSON.parse(body);
-        if (obj.hasOwnProperty('error') && obj.error.code == 'NOAUTH') {
+        if (obj.hasOwnProperty('error') &&
+	    (obj.error.code == 'NOAUTH' || obj.error.code == 'EXPIRETOKEN')) {
             getSession(function(_session) {
                 getToken(_session, function(_token) {
                     session = _session;
